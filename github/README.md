@@ -95,7 +95,9 @@ This will walk you through installing the GitHub app, creating the workflow, and
            with:
              model: anthropic/claude-sonnet-4-20250514
              use_github_token: true
-   ```
+    ```
+
+   Set `auto_commit: false` to prevent the action from committing or pushing changes. This is useful for comment-only or analysis-only workflows, or when earlier workflow steps may leave unrelated working tree changes behind.
 
 3. Store the API keys in secrets. In your organization or project **settings**, expand **Secrets and variables** on the left and select **Actions**. Add the required API keys.
 

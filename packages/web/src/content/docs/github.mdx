@@ -84,6 +84,7 @@ Or you can set it up manually.
 - `model`: The model to use with OpenCode. Takes the format of `provider/model`. This is **required**.
 - `agent`: The agent to use. Must be a primary agent. Falls back to `default_agent` from config or `"build"` if not found.
 - `share`: Whether to share the OpenCode session. Defaults to **true** for public repositories.
+- `auto_commit`: Whether OpenCode should automatically commit and push dirty working tree changes after it runs. Defaults to **true**. Set this to **false** for comment-only or analysis-only workflows, or when earlier workflow steps may leave unrelated changes in the working tree.
 - `prompt`: Optional custom prompt to override the default behavior. Use this to customize how OpenCode processes requests.
 - `token`: Optional GitHub access token for performing operations such as creating comments, committing changes, and opening pull requests. By default, OpenCode uses the installation access token from the OpenCode GitHub App, so commits, comments, and pull requests appear as coming from the app.
 

@@ -17,6 +17,11 @@ inputs:
     description: "Share the opencode session (defaults to true for public repos)"
     required: false
 
+  auto_commit:
+    description: "Automatically commit and push dirty working tree changes after opencode runs. Set to false for comment-only/no-write mode."
+    required: false
+    default: "true"
+
   prompt:
     description: "Custom prompt to override the default prompt"
     required: false
@@ -72,6 +77,7 @@ runs:
         MODEL: ${{ inputs.model }}
         AGENT: ${{ inputs.agent }}
         SHARE: ${{ inputs.share }}
+        AUTO_COMMIT: ${{ inputs.auto_commit }}
         PROMPT: ${{ inputs.prompt }}
         USE_GITHUB_TOKEN: ${{ inputs.use_github_token }}
         MENTIONS: ${{ inputs.mentions }}

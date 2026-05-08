@@ -146,6 +146,7 @@ try {
   const repoData = await fetchRepo()
   session = await client.session.create<true>().then((r) => r.data)
   await subscribeSessionEvents()
+  const autoCommit = useEnvAutoCommit()
   shareId = await (async () => {
     if (useEnvShare() === false) return
     if (!useEnvShare() && repoData.data.private) return
@@ -168,7 +169,7 @@ try {
       await checkoutLocalBranch(prData)
       const dataPrompt = buildPromptDataForPR(prData)
       const response = await chat(`${userPrompt}\n\n${dataPrompt}`, promptFiles)
-      if (await branchIsDirty()) {
+      if (autoCommit && (await branchIsDirty())) {
         const summary = await summarize(response)
         await pushToLocalBranch(summary)
       }
@@ -180,7 +181,7 @@ try {
       await checkoutForkBranch(prData)
       const dataPrompt = buildPromptDataForPR(prData)
       const response = await chat(`${userPrompt}\n\n${dataPrompt}`, promptFiles)
-      if (await branchIsDirty()) {
+      if (autoCommit && (await branchIsDirty())) {
         const summary = await summarize(response)
         await pushToForkBranch(summary, prData)
       }
@@ -194,7 +195,7 @@ try {
     const issueData = await fetchIssue()
     const dataPrompt = buildPromptDataForIssue(issueData)
     const response = await chat(`${userPrompt}\n\n${dataPrompt}`, promptFiles)
-    if (await branchIsDirty()) {
+    if (autoCommit && (await branchIsDirty())) {
       const summary = await summarize(response)
       await pushToNewBranch(summary, branch)
       const pr = await createPR(
@@ -329,6 +330,14 @@ function useEnvShare() {
   if (value === "true") return true
   if (value === "false") return false
   throw new Error(`Invalid share value: ${value}. Share must be a boolean.`)
+}
+
+function useEnvAutoCommit() {
+  const value = process.env["AUTO_COMMIT"]
+  if (!value) return true
+  if (value === "true") return true
+  if (value === "false") return false
+  throw new Error(`Invalid auto_commit value: ${value}. auto_commit must be a boolean.`)
 }
 
 function useEnvMock() {
